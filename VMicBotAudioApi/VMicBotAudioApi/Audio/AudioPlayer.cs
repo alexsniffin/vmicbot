@@ -34,6 +34,8 @@ namespace VMicBotAudioApi.Audio
                 _outputDevice.Stop();
             }
             
+            _outputDevice.Pause();
+
             _currentSongThread = new Thread(() =>
             {
                 using(var audioFile = new AudioFileReader(song))
@@ -41,13 +43,35 @@ namespace VMicBotAudioApi.Audio
                 {
                     _outputDevice.Init(audioFile);
                     _outputDevice.Play();
-                    while (_outputDevice.PlaybackState == PlaybackState.Playing)
+                    while (_outputDevice.PlaybackState == PlaybackState.Playing || _outputDevice.PlaybackState == PlaybackState.Paused)
                     {
                         Thread.Sleep(1000);
                     }
                 }
             });
             _currentSongThread.Start();
+        }
+
+        public bool Pause()
+        {
+            if (_outputDevice.PlaybackState == PlaybackState.Playing)
+            {
+                _outputDevice.Pause();
+                return true;
+            }
+
+            return false;
+        }
+        
+        public bool Resume()
+        {
+            if (_outputDevice.PlaybackState == PlaybackState.Paused)
+            {
+                _outputDevice.Play();
+                return true;
+            }
+
+            return false;
         }
 
         public void Stop()

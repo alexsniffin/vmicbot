@@ -6,5 +6,7 @@ namespace VMicBotAudioApi.Audio
     {
         void Play(string song);
         void Stop();
+        bool Resume();
+        bool Pause();
     }
 }

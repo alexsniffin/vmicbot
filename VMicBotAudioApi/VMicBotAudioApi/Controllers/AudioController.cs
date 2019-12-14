@@ -48,5 +48,33 @@ namespace VMicBotAudioApi.Controllers
                 Status = "OK"
             };
         }
+        
+        [HttpGet]
+        [Route("pause")]
+        public ActionResult<object> Pause()
+        {
+            var result = _audioPlayer.Pause();
+            
+            if (result)
+            {
+                return new AcceptedResult();
+            }
+
+            return new BadRequestResult();
+        }
+        
+        [HttpGet]
+        [Route("resume")]
+        public ActionResult<object> Resume()
+        {
+            var result = _audioPlayer.Resume();
+
+            if (result)
+            {
+                return new AcceptedResult();
+            }
+
+            return new BadRequestResult();
+        }
     }
 }
