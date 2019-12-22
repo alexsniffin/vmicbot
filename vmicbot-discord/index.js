@@ -32,7 +32,25 @@ bot.on('messageCreate', async (msg) => {
                 msg.channel.createMessage('Hmmm, some reason this didn\'t work right...');
                 console.log(error);
             });
-        } 
+        } else if (msg.content === "!vm pause") {
+            var request = 'http://' + host + '/api/audio/pause'
+            await axios.get(request).then((response) => {
+                msg.channel.createMessage('Pausing audio');
+            })
+            .catch(error => {
+                msg.channel.createMessage('Hmmm, some reason this didn\'t work right...');
+                console.log(error);
+            });
+        } else if (msg.content === "!vm resume") {
+            var request = 'http://' + host + '/api/audio/resume'
+            await axios.get(request).then((response) => {
+                msg.channel.createMessage('Resuming audio');
+            })
+            .catch(error => {
+                msg.channel.createMessage('Hmmm, some reason this didn\'t work right...');
+                console.log(error);
+            });
+        }
     } catch (err) {
         console.warn('Failed to respond to mention.');
         console.warn(err);
