@@ -1,13 +1,8 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using NAudio.Wave;
 using VMicBotAudioApi.Youtube;
-using NAudio.Wave.WaveFormats;
 using VMicBotAudioApi.Audio;
-using YoutubeExplode;
-using YoutubeExplode.Models.MediaStreams;
+
 
 namespace VMicBotAudioApi.Controllers
 {

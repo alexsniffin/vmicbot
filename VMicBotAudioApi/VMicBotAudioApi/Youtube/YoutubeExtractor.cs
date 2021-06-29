@@ -1,11 +1,12 @@
+using System;
 using System.IO;
-using System.Threading;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using MediaToolkit;
 using MediaToolkit.Model;
-using VideoLibrary;
 using YoutubeExplode;
-using YoutubeExplode.Models.MediaStreams;
+using YoutubeExplode.Videos.Streams;
 
 namespace VMicBotAudioApi.Youtube
 {
@@ -22,21 +23,29 @@ namespace VMicBotAudioApi.Youtube
             _engine = engine;
             _youtubeClient = youtubeClient;
         }
-        
+
         public async Task<string> Extract(string video)
         {
-            var id = YoutubeClient.ParseVideoId(video);
-
-            if (!File.Exists($"{Mp3Path}{id}.mp3"))
+            var uri = new Uri(video);
+            var query = HttpUtility.ParseQueryString(uri.Query);
+            var videoId = string.Empty;
+            if (query.AllKeys.Contains("v"))
             {
-                var streamInfoSet = await _youtubeClient.GetVideoMediaStreamInfosAsync(id);
-                var streamInfo = streamInfoSet.Audio.WithHighestBitrate();
-                var ext = streamInfo.Container.GetFileExtension();
+                videoId = query["v"];
+            }
+            else
+            {
+                videoId = uri.Segments.Last();
+            }
 
-                await _youtubeClient.DownloadMediaStreamAsync(streamInfo, $"{VideoPath}temp.{ext}");
+            if (!File.Exists($"{Mp3Path}{videoId}.mp3"))
+            {
+                var streamManifest = await _youtubeClient.Videos.Streams.GetManifestAsync(video);
+                var streamInfo = streamManifest.GetAudioStreams().GetWithHighestBitrate();
+                await _youtubeClient.Videos.Streams.DownloadAsync(streamInfo, $"{VideoPath}temp.mp3");
 
-                var inputFile = new MediaFile {Filename = $"{VideoPath}temp.{ext}"};
-                var outputFile = new MediaFile {Filename = $"{Mp3Path}{id}.mp3"};
+                var inputFile = new MediaFile {Filename = $"{VideoPath}temp.mp3"};
+                var outputFile = new MediaFile {Filename = $"{Mp3Path}{videoId}.mp3"};
 
                 using (var engine = _engine)
                 {
@@ -45,7 +54,7 @@ namespace VMicBotAudioApi.Youtube
                 }
             }
 
-            return id;
+            return videoId;
         }
     }
 }

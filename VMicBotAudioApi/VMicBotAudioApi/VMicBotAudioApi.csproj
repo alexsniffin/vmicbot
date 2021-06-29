@@ -9,9 +9,9 @@
         <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.HttpsPolicy" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
-        <PackageReference Include="NAudio" Version="1.7.0" />
-        <PackageReference Include="VideoLibrary" Version="2.0.3" />
-        <PackageReference Include="YoutubeExplode" Version="4.7.10" />
+        <PackageReference Include="NAudio" Version="2.0.1" />
+        <PackageReference Include="VideoLibrary" Version="3.1.2" />
+        <PackageReference Include="YoutubeExplode" Version="6.0.3" />
     </ItemGroup>
 
 </Project>
